@@ -7,4 +7,4 @@ run:
 	./contact_driver
 
 clean:
-	rm -f contact_driver demo.dat
+	rm -f ./contact_driver demo.dat
