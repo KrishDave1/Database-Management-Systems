@@ -1,6 +1,6 @@
 CC = gcc
 all:
-	$(CC) -o pds_tester contact.c IMT2022020_pds.c pds_tester.c
+	$(CC) -o pds_tester contact.c IMT2022043_pds.c pds_tester.c
 
 clean:
 	rm newdemo.dat pds_tester newdemo.ndx
