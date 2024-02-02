@@ -32,7 +32,7 @@ int pds_create(char *repo_name)
 	if (repo_handle.pds_data_fp && repo_handle.pds_ndx_fp)
 	{
 		int zero = 0;
-		fwrite(&zero, sizeof(int), 1, repo_handle.pds_ndx_fp);
+		fwrite(&zero, sizeof(int), 1, repo_handle.pds_ndx_fp); // The first entry in ndx file is number of records which in the beginning will be 0.
 		fclose(repo_handle.pds_data_fp);
 		fclose(repo_handle.pds_ndx_fp);
 		repo_handle.repo_status = PDS_REPO_CLOSED;
@@ -56,7 +56,7 @@ int pds_open( char *repo_name, int rec_size )
 	char *filename_ndx = (char *)malloc(sizeof(repo_name));
 	strcpy(filename_ndx, repo_name);
 	strcat(filename_ndx, ".ndx");
-	if (repo_handle.repo_status == PDS_REPO_CLOSED)
+	if (repo_handle.repo_status == PDS_REPO_CLOSED) // This means the file was created successfully using pds_create().
 	{
 		repo_handle.pds_data_fp = fopen(filename_dat, "rb+");
 		repo_handle.pds_ndx_fp = fopen(filename_ndx, "rb+");
@@ -66,7 +66,7 @@ int pds_open( char *repo_name, int rec_size )
 			// Handle file opening errors
 			return PDS_FILE_ERROR;
 		}
-		if (pds_load_ndx() == PDS_SUCCESS)
+		if (pds_load_ndx() == PDS_SUCCESS) // This function helps to get the latest data in ndx array.
 		{
 			fclose(repo_handle.pds_ndx_fp);
 			repo_handle.repo_status = PDS_REPO_OPEN;
@@ -95,6 +95,7 @@ int pds_load_ndx(){
 		return PDS_NDX_SAVE_FAILED;
 	}
 	fread(repo_handle.ndx_array, sizeof(struct PDS_NdxInfo), repo_handle.rec_count, repo_handle.pds_ndx_fp);
+	//! fread here has a syntax where here 3rd parameter is the number of elements to be read from the file and 2th parameter is the size of each element.So writing 3rd parameter as repo_handle.rec_count means we are copying all the elements from the index file to ndx_array.
 	return PDS_SUCCESS;
 }
 
@@ -105,18 +106,18 @@ int pds_load_ndx(){
 // Increment record count
 // Write the record at the end of the file
 // Return failure in case of duplicate key
-int put_rec_by_key( int key, void *rec ){
+int put_rec_by_key( int key, void *rec ){ 
 	if (repo_handle.repo_status == PDS_REPO_OPEN)
 	{
-		if (fseek(repo_handle.pds_data_fp, 0, SEEK_END) == 0)
+		if (fseek(repo_handle.pds_data_fp, 0, SEEK_END) == 0) // Moving the file pointer to the end of the file.
 		{
-			int offset = ftell(repo_handle.pds_data_fp);
+			int offset = ftell(repo_handle.pds_data_fp); // This line is essentially used for getting the total size of the file.ftell() is a function used to get the current position of the file pointer.
 			struct PDS_NdxInfo *temp = (struct PDS_NdxInfo *)malloc(sizeof(struct PDS_NdxInfo));
 			temp->key = key;
 			temp->offset = offset;
-			repo_handle.ndx_array[repo_handle.rec_count] = *(temp);
+			repo_handle.ndx_array[repo_handle.rec_count] = *(temp); // Adding the new entry to ndx_array.(*temp) means the struct temp is pointing to added to ndx_array.
 			repo_handle.rec_count++;
-			fwrite(rec, repo_handle.rec_size, 1, repo_handle.pds_data_fp);
+			fwrite(rec, repo_handle.rec_size, 1, repo_handle.pds_data_fp); // Adding the index in the data table.
 			return PDS_SUCCESS;
 		}
 		return PDS_ADD_FAILED;
@@ -139,8 +140,8 @@ int get_rec_by_key( int key, void *rec ){
 		{
 			if (repo_handle.ndx_array[i].key == key)
 			{
-				fseek(repo_handle.pds_data_fp, repo_handle.ndx_array[i].offset, SEEK_SET);
-				fread(rec, repo_handle.rec_size, 1, repo_handle.pds_data_fp);
+				fseek(repo_handle.pds_data_fp, repo_handle.ndx_array[i].offset, SEEK_SET); // move the file pointer to the offset of the index entry and store the pointer in pds_data_fp.
+				fread(rec, repo_handle.rec_size, 1, repo_handle.pds_data_fp); // reading the data of the entry in rec variable.
 				return PDS_SUCCESS;
 			}
 		}
