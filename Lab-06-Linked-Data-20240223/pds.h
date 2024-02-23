@@ -1,6 +1,5 @@
 #ifndef PDS_H
 #define PDS_H
-#include <stdio.h>
 
 // Error codes
 #define PDS_SUCCESS 0
@@ -13,7 +12,8 @@
 #define PDS_REPO_NOT_OPEN 14
 #define PDS_DELETE_FAILED 15
 
-
+#include<stdio.h>
+#include "bst.h"
 
 // Repository status values
 #define PDS_REPO_OPEN 10
@@ -117,7 +117,7 @@ int pds_link_rec (int key1, int key2);
 // Do a linear search of all link_info records for matching the given parent_key
 // Store the matching linked key in linked_keys_result array
 // Keep updating the result_set_size
-int pds_get_linked_rec(int parent_key, int linked_keys_result[], &result_set_size);
+int pds_get_linked_rec(int parent_key, int linked_keys_result[], int *result_set_size);
 
 // pds_close - CHANGED
 // Open the index file in wb mode (write mode, not append mode)

@@ -1,6 +1,8 @@
 #ifndef PDS_H
 #define PDS_H
 
+#include "bst.h"
+
 // Error codes
 #define PDS_SUCCESS 0
 #define PDS_FILE_ERROR 1
@@ -29,7 +31,7 @@ struct PDS_RepoInfo{
 	FILE *pds_ndx_fp;
 	int repo_status; 
 	int rec_size; // For fixed length records
-	struct BST_Node *pds_bst;
+	struct BST_Node *ndx_root;
 	int rec_count;
 };
 
@@ -68,7 +70,6 @@ int get_rec_by_non_ndx_key(void *key, void *rec, int (*matcher)(void *rec, void 
 
 // delete by ndx_key
 int delete_rec_by_ndx_key( int key );
-
 
 // pds_close
 // Open the index file in wb mode (write mode, not append mode)

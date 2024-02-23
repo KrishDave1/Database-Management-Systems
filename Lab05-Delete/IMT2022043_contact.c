@@ -86,3 +86,16 @@ int match_contact_phone( void *rec, void *key )
 		return 5;
 	}
 }
+
+int delete_contact(int key)
+{
+
+	if (delete_rec_by_ndx_key(key) == PDS_DELETE_FAILED)
+	{
+		return CONTACT_FAILURE;
+	}
+	else
+	{
+		return CONTACT_SUCCESS;
+	}
+}

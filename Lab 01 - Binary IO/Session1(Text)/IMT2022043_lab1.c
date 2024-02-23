@@ -50,7 +50,7 @@ int save_struct_text( char *filename ) {
   struct student students[5] = {s1, s2, s3, s4, s5};
   struct student *ptr = students;
   for (int i = 0; i < 5; i++){
-    // fprintf(fp, "%d %s %d\n", (ptr + i)->rollnum, (ptr + i)->name , (ptr + i)->age);
+    // fprintf(fp, "%d %s %d\n", (ptr + i)->rollnum, (ptr + i)->name , (ptr + i)->age); // This is the same as the following line below.
     fprintf(fp, "%d %s %d\n", (*(ptr + i)).rollnum, (*(ptr + i)).name , (*(ptr + i)).age);
   }
   fclose(fp);
@@ -67,7 +67,7 @@ int read_struct_text( char *filename ) {
   struct student students[5] = {s1, s2, s3, s4, s5};
   struct student *ptr = students;
   for (int i = 0; i < 5; i++){
-    fscanf(fp, "%d %s %d", &((*(ptr + i)).rollnum), ((*(ptr + i)).name) , &((*(ptr + i)).age));
+    fscanf(fp, "%d %s %d", &((*(ptr + i)).rollnum), ((*(ptr + i)).name) , &((*(ptr + i)).age)); // While scanning the data from the file, the address of the variable is used to read the data from the file.
   }
   for (int i = 0; i < 5; i++){
     printf("%d %s %d\n", (*(ptr + i)).rollnum, (*(ptr + i)).name , (*(ptr + i)).age);
@@ -87,7 +87,7 @@ int save_num_binary( char *filename ) {
   // }
 
   //Another Way to avoid the for loop
-  fwrite(ptr, sizeof(int), 20, binfp);
+  fwrite(ptr, sizeof(int), 20, binfp); // Benefit of having the binary file is you can avoid the for loop and write the data to the file in one go.
   fclose(binfp);
   return 0;
 }
@@ -144,4 +144,3 @@ int read_struct_binary( char *filename ) {
   fclose(binfp);
   return 0;
 }
-

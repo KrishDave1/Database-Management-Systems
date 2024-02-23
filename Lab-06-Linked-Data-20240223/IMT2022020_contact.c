@@ -59,7 +59,7 @@ int search_contact_by_phone( char *phone, struct Contact *c, int *io_count )
 	{
 		return PDS_REC_NOT_FOUND;
 	}
-	// Call function
+	
 }
 
 /* Return 0 if phone of the contact matches with phone parameter */
@@ -71,18 +71,30 @@ int match_contact_phone( void *rec, void *key )
     // Store the key in a char pointer
     // Compare the phone values in key and record
     // Return 0,1,>1 based on above condition
-	struct Contact *tmp_Contact_Ptr = (struct Contact *)(rec);
-	char *tmp_char = (char *)(key);
-	if (strcmp(tmp_char, tmp_Contact_Ptr->phone) == 0)
+	struct Contact * temp_Contact_Pointer = (struct Contact *)(rec);
+	char * temp_Char = (char *)(key);
+	if (strcmp(temp_Char, temp_Contact_Pointer->phone) == 0)
 	{
 		return 0;
 	}
-	else if (strcmp(tmp_char, tmp_Contact_Ptr->phone) != 0)
+	else if (strcmp(temp_Char, temp_Contact_Pointer->phone) != 0)
 	{
 		return 1;
 	}
 	else
 	{
 		return 5;
+	}
+	
+}
+
+int delete_contact(int key) {
+	if (delete_rec_by_ndx_key(key) == PDS_DELETE_FAILED)
+	{
+		return CONTACT_FAILURE;
+	}
+	else
+	{
+		return CONTACT_SUCCESS;
 	}
 }
