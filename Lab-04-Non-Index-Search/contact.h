@@ -3,7 +3,7 @@
 
 #define CONTACT_SUCCESS 0
 #define CONTACT_FAILURE 1
- 
+
 struct Contact{
 	int contact_id;
 	char contact_name[30];
