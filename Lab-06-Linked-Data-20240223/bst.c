@@ -70,6 +70,7 @@ void bst_destroy( struct BST_Node *root )
 		bst_free( root->left_child );
 		bst_free( root->right_child );
 		free(root->data);
+		root->data = NULL;
 		free(root);
 	}
 }

@@ -1,12 +1,12 @@
 CC = gcc
 all:
-	$(CC) -o pds_tester IMT2022020_contact.c IMT2022020_pds.c bst.c pds_tester.c
+	$(CC) -o IMT2022043_student_course_pds_tester IMT2022043_pds.c bst.c 
 
 clean:
-	rm newdemo.dat pds_tester newdemo.ndx
+	rm IMT2022043_student_course_pds_tester newdemo_course.dat newdemo_student.dat newdemo_student.ndx newdemo_student_newdemo_course.dat interactive student.dat course.dat student_course.dat student.ndx
 
-check_testcases:
-	./pds_tester testcase.in
+interactive:
+	$(CC) -o interactive IMT2022043_pds.c bst.c linked_data_demo.c
 
-check_testcases_part_2:
-	./pds_tester testcase1.in
+run_interactive:
+	./interactive

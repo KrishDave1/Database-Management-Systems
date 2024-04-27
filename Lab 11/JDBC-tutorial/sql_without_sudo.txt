@@ -1,0 +1,12 @@
+	1.	Steps to run mysql without sudo :
+	2.	
+	3.	Connect to MySQL: sudo mysql -u root 
+	4.	Check for mysql users in db: SELECT User,Host FROM mysql.user; 
+	5.	Drop root user account: DROP USER 'root'@'localhost'; 
+	6.	SET GLOBAL validate_password_length = 5; 
+	7.	SET GLOBAL validate_password_number_count = 0; 
+	8.	SET GLOBAL validate_password_mixed_case_count = 0; 
+	9.	SET GLOBAL validate_password_special_char_count = 0; 
+	10.	SET GLOBAL validate_password_policy = LOW; 
+	11.	Recreate root user: CREATE USER 'root'@'%' IDENTIFIED BY 'admin' 
+	12.	Grant all privileges to root user: GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' WITH GRANT OPTION; 

@@ -11,6 +11,7 @@
 #define PDS_NDX_SAVE_FAILED 13
 #define PDS_REPO_NOT_OPEN 14
 #define PDS_DELETE_FAILED 15
+#define PDS_LINK_FAILED 16
 
 #include<stdio.h>
 #include "bst.h"
@@ -98,12 +99,30 @@ int get_rec_by_non_ndx_key(void *key, void *rec, int (*matcher)(void *rec, void 
 // get_linked_rec_by_key - NEW
 // Do a linear search of the given key in the linked data file
 int get_linked_rec_by_key( int key, void *rec );
+/*
+This function returns the corresponding ndx key for the given record at a particular io_count.
+Let us say we know that we find a particular record at io_count = k.
+Then, in the .dat file the location of this record will be = k * repo_handle.rec_size.
+Thus, using fseek() we can set the repo_handle.pds_data_fp at this point.
+Now we will read only the key/id (ndx key) of the record and return it.
+If fseek() does not return 0 then we return PDS_FILE_ERROR.
+*/
 
 // delete by ndx_key - NO CHANGE
 // NOTE: When we delete a key, we need to actually delete the linked records too.
 // But we will ignore that part for now. 
 // This function will now delete only from the main data
 int delete_rec_by_ndx_key( int key );
+/*
+NOTE - We will not decrement the repo_handle.rec_count by 1. Let us understand the reason behind by this through an example.
+Assume the key-offset-is_deleted in the .ndx file looks like this:
+10000 10 0
+10001 20 0
+10002 30 0
+10003 40 0
+10004 50 0
+Currently, repo_handle.rec_count is 5. Now, let us say when we want to delete the record with key 10001. Now, if after toggling the is_deleted attribute the record with key 10001 to 1, we decrement the repo_handle.rec_count by 1. Let us say in the next query, we want to read the record with key 10004. Now our repo_handle.rec_count is 4. Now, we would never be able to reach the end of the file because our loop will run 4 times to search but our required record can only be accessed in the 5th iteration. Thus, we should not decrement the repo_handle.rec_count.
+*/
 
 // pds_link_rec - NEW
 // Create PDS_link_info instance based on key1 and key2
