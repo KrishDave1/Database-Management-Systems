@@ -1,3 +1,0 @@
-export CLASSPATH='/Users/varadbadhe/Downloads/session 10/mysql-connector-j-8.3.0.jar:.'
-javac JdbcDemo.java
-java JdbcDemo
